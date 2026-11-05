@@ -32,7 +32,7 @@ Add `?no3d=1` to the main address to preview the 2D fallback inside the 3D modal
 ## 1b. Hosting without PHP (Vercel, Netlify, GitHub Pages)
 
 Those hosts do not run PHP. Double-click **`export-static.bat`** (needs XAMPP's PHP) to write static copies: `index.html`,
-`how-it-works/index.html` and `truck-sizes/index.html` (`vercel.json` has `cleanUrls`, `.vercelignore` skips the PHP-only folders).
+`how-it-works/index.html` and `truck-sizes/index.html` (`vercel.json` has `cleanUrls`, `.vercelignore` skips the PHP-only folders and `tests/`, which are for your own machine and are not deployed).
 On Vercel: framework preset **Other**, no build command. **`api/quote.php` needs PHP**: on a static host the quote form shows its
 "could not send" state and never claims the request was received. Use a PHP host for a working quote form.
 
