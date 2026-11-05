@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Estimator tests</title>
+  <script type="importmap">{"imports":{"three":"../assets/vendor/three/three.module.js","three/addons/":"../assets/vendor/three/addons/"}}</script>
+  <style>
+    body { font: 15px/1.5 system-ui, Arial, sans-serif; margin: 24px; color: #172033; background: #F5F7FB; }
+    h1 { font-size: 22px; color: #172554; }
+    .sum { font-weight: 700; padding: 10px 14px; border-radius: 10px; display: inline-block; margin-bottom: 14px; }
+    .sum.ok { background: #F0FDF4; color: #15803D; border: 1px solid #86EFAC; }
+    .sum.bad { background: #FEF2F2; color: #B91C1C; border: 1px solid #FCA5A5; }
+    ul { list-style: none; padding: 0; max-width: 900px; }
+    li { padding: 6px 10px; border-bottom: 1px solid #E2E8F0; background: #fff; }
+    li.pass::before { content: "PASS  "; color: #15803D; font-weight: 700; }
+    li.fail::before { content: "FAIL  "; color: #B91C1C; font-weight: 700; }
+    li .err { display: block; color: #B91C1C; font-size: 13px; margin-left: 52px; }
+  </style>
+</head>
+<body>
+  <h1>Truck Size Estimator - automated checks</h1>
+  <p>Runs the calculation, search, inventory, layout and form-validation rules in this browser. No data is sent anywhere.</p>
+  <div id="summary" class="sum">Running...</div>
+  <ul id="list"></ul>
+  <script src="../assets/js/icons.js"></script>
+  <script src="../assets/js/catalogue.js"></script>
+  <script src="../assets/js/inventory.js"></script>
+  <script src="../assets/js/estimator.js"></script>
+  <script src="../assets/js/truck-visualizer.js"></script>
+  <script src="../assets/js/ui-common.js"></script>
+  <script src="../assets/js/ui-house-size.js"></script>
+  <script src="../assets/js/quote-form.js"></script>
+  <script src="estimator-tests.js"></script>
+  <script>
+    // The demo inventories live in app.js; they are copied here by reading the same file text so the checks cannot drift.
+    Promise.all([
+      fetch('../data/categories.json').then(function (r) { return r.json(); }),
+      fetch('../data/household-items.json').then(function (r) { return r.json(); }),
+      fetch('../data/vehicles.json').then(function (r) { return r.json(); }),
+      fetch('../assets/js/app.js').then(function (r) { return r.text(); }),
+      fetch('../data/house-presets.json').then(function (r) { return r.json(); })
+    ]).then(function (parts) {
+      var m = parts[3].match(/var DEMOS = (\[[\s\S]*?\n  \]);/);
+      window.TSE_DEMOS = m ? (new Function('return ' + m[1]))() : [];
+      if (!window.TSE_TESTS) throw new Error('estimator-tests.js did not load');
+      var res = window.TSE_TESTS.run({ categories: parts[0], items: parts[1], vehicles: parts[2], presets: parts[4] });
+      var data = { categories: parts[0], items: parts[1], vehicles: parts[2], presets: parts[4] };
+      var render = function (res) {
+        var s = document.getElementById('summary');
+        s.textContent = res.passed + ' passed, ' + res.failed + ' failed';
+        s.className = 'sum ' + (res.failed ? 'bad' : 'ok');
+        document.getElementById('list').innerHTML = res.results.map(function (r) {
+          return '<li class="' + (r.ok ? 'pass' : 'fail') + '">' + r.name + (r.ok ? '' : '<span class="err">' + String(r.error).replace(/</g, '&lt;') + '</span>') + '</li>';
+        }).join('');
+      };
+      render(res);
+      // 3D data-flow, model and layout checks (ES module, needs the import map above)
+      return import('./cargo-layout-tests.js').then(function (m) {
+        var r3 = m.runLayoutTests(data, window.TSE, window.TSE_DEMOS);
+        render({ passed: res.passed + r3.passed, failed: res.failed + r3.failed, results: res.results.concat(r3.results) });
+      });
+    }).catch(function (e) {
+      var s = document.getElementById('summary'); s.className = 'sum bad'; s.textContent = 'Could not run: ' + e + ' (open this page through a web server such as http://localhost/, not as a file)';
+    });
+  </script>
+</body>
+</html>

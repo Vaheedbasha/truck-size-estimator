@@ -1,0 +1,141 @@
+{
+    "dataStatus": "class-typical-unverified",
+    "notice": "Vehicle profiles describe common Indian goods-vehicle CLASSES used for household shifting, with typical cargo-body sizes quoted by transport operators. They are NOT manufacturer specifications and are not verified for any particular vehicle, body builder or fleet. Cargo-body size, payload and permitted load vary by make, model and body. Confirm the real dimensions and payload with the transport provider before relying on a recommendation.",
+    "estimateVersion": "india-class-estimate-1",
+    "nearCapacityThreshold": 0.8,
+    "vehicles": [
+        {
+            "id": "mini-goods",
+            "name": "Mini goods vehicle",
+            "shortName": "Mini",
+            "class": "mini",
+            "model": "mini",
+            "sortOrder": 10,
+            "active": true,
+            "dataStatus": "class-typical",
+            "description": "Small covered goods vehicle (Tata Ace / Chhota Hathi class). Usually suits a studio or a few items.",
+            "classExamples": "Tata Ace, Mahindra Jeeto and similar small commercial vehicles",
+            "internalDimensionsFt": {
+                "length": 7,
+                "width": 4.8,
+                "height": 4.5
+            },
+            "loadingEfficiency": 0.75,
+            "payloadLimitKg": null
+        },
+        {
+            "id": "pickup-8ft",
+            "name": "Pickup truck (8 ft)",
+            "shortName": "Pickup 8 ft",
+            "class": "pickup",
+            "model": "pickup",
+            "sortOrder": 20,
+            "active": true,
+            "dataStatus": "class-typical",
+            "description": "8 ft pickup with a covered load body (Bolero Pickup class). Often used for a 1 BHK move.",
+            "classExamples": "Mahindra Bolero Pickup, Tata Intra V30, Ashok Leyland Dost and similar 8 ft pickups",
+            "internalDimensionsFt": {
+                "length": 8,
+                "width": 5,
+                "height": 4.8
+            },
+            "loadingEfficiency": 0.75,
+            "payloadLimitKg": null
+        },
+        {
+            "id": "lcv-10ft",
+            "name": "10 ft closed truck (LCV)",
+            "shortName": "10 ft",
+            "class": "lcv",
+            "model": "lcv",
+            "sortOrder": 25,
+            "active": true,
+            "dataStatus": "class-typical",
+            "description": "10 ft closed-body light commercial vehicle (Tata 407 / Eicher Pro 2049 class). Often used for a 1 BHK or a small 2 BHK local move.",
+            "classExamples": "Tata 407, Eicher Pro 2049 and similar 10 ft light trucks",
+            "internalDimensionsFt": {
+                "length": 10,
+                "width": 5.5,
+                "height": 5.5
+            },
+            "loadingEfficiency": 0.75,
+            "payloadLimitKg": null
+        },
+        {
+            "id": "lcv-14ft",
+            "name": "14 ft closed truck (LCV)",
+            "shortName": "14 ft",
+            "class": "lcv",
+            "model": "lcv",
+            "sortOrder": 30,
+            "active": true,
+            "dataStatus": "class-typical",
+            "description": "14 ft closed-body light commercial vehicle (Tata 407 / Eicher 14 ft class). Often used for a 2 BHK local move.",
+            "classExamples": "Eicher Pro 14 ft, Tata 14 ft LPT and similar light trucks",
+            "internalDimensionsFt": {
+                "length": 14,
+                "width": 6,
+                "height": 6
+            },
+            "loadingEfficiency": 0.75,
+            "payloadLimitKg": null
+        },
+        {
+            "id": "truck-17ft",
+            "name": "17 ft closed truck",
+            "shortName": "17 ft",
+            "class": "truck",
+            "model": "truck",
+            "sortOrder": 40,
+            "active": true,
+            "dataStatus": "class-typical",
+            "description": "17 ft closed-body medium truck. Often used for a large 2 BHK or a 3 BHK move.",
+            "classExamples": "Eicher 17 ft and similar 17 ft medium trucks",
+            "internalDimensionsFt": {
+                "length": 17,
+                "width": 6.5,
+                "height": 7
+            },
+            "loadingEfficiency": 0.75,
+            "payloadLimitKg": null
+        },
+        {
+            "id": "truck-19ft",
+            "name": "19 ft closed truck",
+            "shortName": "19 ft",
+            "class": "truck-large",
+            "model": "truck-tandem",
+            "sortOrder": 50,
+            "active": true,
+            "dataStatus": "class-typical",
+            "description": "19 ft closed-body truck. Often used for a 3 to 4 BHK move or long-distance shifting.",
+            "classExamples": "19 ft medium and heavy-duty closed trucks",
+            "internalDimensionsFt": {
+                "length": 19,
+                "width": 7,
+                "height": 7
+            },
+            "loadingEfficiency": 0.75,
+            "payloadLimitKg": null
+        },
+        {
+            "id": "truck-22ft",
+            "name": "22 ft closed truck",
+            "shortName": "22 ft",
+            "class": "truck-large",
+            "model": "truck-tandem",
+            "sortOrder": 60,
+            "active": true,
+            "dataStatus": "class-typical",
+            "description": "22 ft closed-body heavy truck. Often used for a large 3 to 4 BHK home, a villa or long-distance shifting.",
+            "classExamples": "Tata 22 ft and similar 22 ft heavy trucks",
+            "internalDimensionsFt": {
+                "length": 22,
+                "width": 7.5,
+                "height": 7
+            },
+            "loadingEfficiency": 0.75,
+            "payloadLimitKg": null
+        }
+    ]
+}

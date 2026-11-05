@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Only canonical, indexable pages. Replace YOUR-DOMAIN.example with the real address before launch. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://YOUR-DOMAIN.example/</loc></url>
+  <url><loc>https://YOUR-DOMAIN.example/how-it-works/</loc></url>
+  <url><loc>https://YOUR-DOMAIN.example/truck-sizes/</loc></url>
+</urlset>

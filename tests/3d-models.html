@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3D model gallery</title>
+  <style>
+    body { margin: 0; font: 14px/1.4 system-ui, Arial, sans-serif; background: #F5F7FB; color: #172033; }
+    header { padding: 12px 16px; background: #172554; color: #fff; }
+    header h1 { margin: 0; font-size: 18px; }
+    #info { padding: 8px 16px; color: #475569; }
+    #stage { width: 100%; height: calc(100vh - 110px); min-height: 420px; }
+  </style>
+  <script type="importmap">{"imports":{"three":"../assets/vendor/three/three.module.js","three/addons/":"../assets/vendor/three/addons/"}}</script>
+</head>
+<body>
+  <header><h1>3D model gallery (every visualType, approximate default sizes)</h1></header>
+  <p id="info">Drag to rotate, scroll to zoom. Use ?cols=10 to change the grid.</p>
+  <div id="stage"></div>
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+    import { createItemFactory } from '../assets/js/3d/item-models.js';
+    import { SPECS, dimsFor } from '../assets/js/3d/item-specs.js';
+    const stage = document.getElementById('stage');
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.shadowMap.enabled = true; stage.appendChild(renderer.domElement);
+    const scene = new THREE.Scene(); scene.background = new THREE.Color('#EEF3FB');
+    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 200);
+    scene.add(new THREE.HemisphereLight('#fff', '#B8C4D6', 1.0));
+    const sun = new THREE.DirectionalLight('#fff', 1.5); sun.position.set(8, 14, 10); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
+    Object.assign(sun.shadow.camera, { left: -25, right: 25, top: 25, bottom: -25, far: 80 }); scene.add(sun);
+    const ground = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshStandardMaterial({ color: '#E1E8F2' })); ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+    const factory = createItemFactory(THREE, RoundedBoxGeometry);
+    const types = Object.keys(SPECS), cols = +(new URLSearchParams(location.search).get('cols')) || 10, gap = 2.6;
+    let missing = [];
+    types.forEach((t, i) => {
+      const volFt3 = SPECS[t].dims.reduce((a, b) => a * b, 1) / 0.0283168; // default proportions at their natural size
+      const d = dimsFor({ visualType: t, volumeFt3: volFt3 });
+      if (!factory.hasModel(t)) missing.push(t);
+      const g = factory.build(t, d.w, d.d, d.h, { variant: i });
+      g.position.set((i % cols) * gap - ((cols - 1) * gap) / 2, 0, Math.floor(i / cols) * gap);
+      g.rotation.y = -0.5; scene.add(g);
+    });
+    const rows = Math.ceil(types.length / cols);
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.target.set(0, 0.6, (rows - 1) * gap / 2); camera.position.set(0, 14, (rows - 1) * gap / 2 + 15); controls.update();
+    function resize() { const w = stage.clientWidth, h = stage.clientHeight; renderer.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+    addEventListener('resize', resize); resize();
+    document.getElementById('info').textContent = types.length + ' types. Without a dedicated model: ' + (missing.length ? missing.join(', ') : 'none') + '. Drag to rotate, scroll to zoom.';
+    (function loop() { controls.update(); renderer.render(scene, camera); requestAnimationFrame(loop); })();
+  </script>
+</body>
+</html>

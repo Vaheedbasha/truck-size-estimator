@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>How the Truck Size Estimate Works - Method and Limits</title>
+  <meta name="description" content="How this estimator turns your household items into a truck-size estimate: packed volume, usable cargo space, 3D placement checks and what it cannot tell you.">
+  <link rel="canonical" href="https://YOUR-DOMAIN.example/how-it-works/">
+  <meta name="theme-color" content="#041148">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Truck Size Estimator">
+  <meta property="og:title" content="How the Truck Size Estimate Works - Method and Limits">
+  <meta property="og:description" content="How this estimator turns your household items into a truck-size estimate: packed volume, usable cargo space, 3D placement checks and what it cannot tell you.">
+  <meta property="og:url" content="https://YOUR-DOMAIN.example/how-it-works/">
+  <meta property="og:locale" content="en_IN">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23041148'/%3E%3Crect x='5' y='9' width='14' height='11' rx='2' fill='%23FF8A14'/%3E%3Cpath d='M21 12h4l3 4v4h-7z' fill='%23fff'/%3E%3Ccircle cx='11' cy='22' r='3' fill='%23fff'/%3E%3Ccircle cx='24' cy='22' r='3' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../assets/css/style.css?v=1793885751">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Truck Size Estimator","item":"https://YOUR-DOMAIN.example/"},{"@type":"ListItem","position":2,"name":"How it works","item":"https://YOUR-DOMAIN.example/how-it-works/"}]}</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to the main content</a>
+<!-- UI icon sprite (stroke icons, 24x24). Used with <use href="#i-name">. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v6M14 11v6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><path d="M7.9 2h8.2L22 7.9v8.2L16.1 22H7.9L2 16.1V7.9z"/><path d="M12 8v4M12 16h.01"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-chevron-up" viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></symbol>
+    <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-truck" viewBox="0 0 24 24"><path d="M1 4h15v12H1zM16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-15-6.7L3 13"/></symbol>
+    <symbol id="i-retry" viewBox="0 0 24 24"><path d="M23 4v6h-6"/><path d="M20.5 15a9 9 0 1 1-2.1-9.4L23 10"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></symbol>
+    <symbol id="i-rotate" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24"><path d="M21 8 12 3 3 8v8l9 5 9-5z"/><path d="m3 8 9 5 9-5M12 13v8"/></symbol>
+    <symbol id="i-cube" viewBox="0 0 24 24"><path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="m3 7 9 5 9-5M12 12v10"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11 12 3l9 8"/><path d="M5 10v10h14V10M10 20v-6h4v6"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M5 21h14M5 7h14M5 7l-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0z"/></symbol>
+  </defs>
+</svg>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="../" aria-label="Truck Size Estimator - home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40" width="36" height="36"><rect width="40" height="40" rx="11" fill="#041148"/><rect x="6" y="11" width="18" height="15" rx="3" fill="#FF8A14"/><path d="M26 15h6l4 5v6H26z" fill="#fff"/><circle cx="13" cy="28" r="3.4" fill="#fff" stroke="#041148" stroke-width="1.6"/><circle cx="30" cy="28" r="3.4" fill="#fff" stroke="#041148" stroke-width="1.6"/></svg>
+      </span>
+      <span class="brand-text"><strong>Truck Size Estimator</strong></span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="../#estimator">Estimator</a></li>        <li><a href="../how-it-works/" aria-current="page">How it works</a></li>        <li><a href="../truck-sizes/">Truck sizes</a></li>        <li><a href="../#faq">FAQ</a></li>      </ul>
+      <a class="btn btn-primary nav-cta" href="../#estimator">Estimate truck size</a>
+    </nav>
+    <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="site-nav">
+      <svg class="ui-icon" aria-hidden="true"><use href="#i-menu"/></svg><span>Menu</span>
+    </button>
+  </div>
+</header>
+<main id="main">
+  <div class="page-hero">
+    <div class="container narrow">
+      <nav class="breadcrumb" aria-label="Breadcrumb"><ol><li><a href="../">Truck Size Estimator</a></li><li aria-current="page">How it works</li></ol></nav>
+      <h1>How the truck size estimate works</h1>
+      <p class="lead"><strong>Short answer:</strong> the estimator adds up the packed volume of the items you choose, compares it with the usable cargo space of five common Indian goods-vehicle classes, suggests the smallest class that covers it, and then checks that every item has a physical place in that vehicle. Last reviewed November 2026.</p>
+    </div>
+  </div>
+
+  <article class="container narrow prose">
+    <section aria-labelledby="method">
+      <h2 id="method">The method, step by step</h2>
+      <ol class="plain-steps">
+        <li><strong>You choose a home size.</strong> Studio / 1 RK to 4+ BHK, or not sure. This is context only. It does not add items and does not limit what you can add.</li>
+        <li><strong>You add items.</strong> Each catalogue item has variants (for example 3-seater sofa, or queen bed assembled or dismantled). Every variant has a packed volume in cubic feet and a packed size in centimetres.</li>
+        <li><strong>Volumes are added.</strong> Item volume multiplied by quantity, summed. A bundle (such as a bed set) counts once. A dismantled item counts once, using the volume of its variant, even though it is drawn as several flat parts.</li>
+        <li><strong>Vehicles are compared.</strong> Usable volume is internal length × width × height × 0.75. At or below 100% of usable volume a load fits by volume; at 80% or more it is shown as near capacity.</li>
+        <li><strong>The smallest class that fits is suggested.</strong> If your load is bigger than the largest class, the result says that more than one vehicle, or a manual survey, may be needed. It never claims that a single vehicle fits.</li>
+        <li><strong>A 3D loading plan checks placement.</strong> The suggested vehicle is tested in the background. If some items have no valid place, the next larger class that can take everything is suggested and the reason is shown.</li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="terms">
+      <h2 id="terms">Terms used in the estimator</h2>
+      <dl class="term-list">
+        <div><dt>Cargo volume</dt><dd>The space a load body offers, in cubic feet. It is approximate cargo space, not the weight a vehicle may carry.</dd></div>
+        <div><dt>Payload</dt><dd>The weight a vehicle may carry. <strong>This estimator does not check payload.</strong> Confirm it with the transport provider.</dd></div>
+        <div><dt>Internal cargo dimensions</dt><dd>The inside length, width and height of the load body. The estimator uses typical values for each class (see <a href="../truck-sizes/">Truck sizes</a>), not the dimensions of a particular vehicle.</dd></div>
+        <div><dt>Inventory</dt><dd>The list of items and quantities you add. It stays in your browser tab and is sent with a quote request.</dd></div>
+        <div><dt>Estimate confidence</dt><dd>An estimate is only as good as its inputs. Item sizes are approximate, vehicle sizes are class-typical, and custom items with a rough size are marked approximate.</dd></div>
+      </dl>
+    </section>
+
+    <section aria-labelledby="assumptions">
+      <h2 id="assumptions">Assumptions in the numbers</h2>
+      <div class="table-wrap">
+        <table class="data-table">
+          <caption class="sr-only">Assumptions used by the estimator</caption>
+          <thead><tr><th scope="col">Assumption</th><th scope="col">Value</th><th scope="col">Why</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Usable share of cargo space</th><td>75%</td><td>Real loads leave gaps between awkward shapes.</td></tr>
+            <tr><th scope="row">Near-capacity warning</th><td>80% of usable volume</td><td>Gives a margin before the vehicle is full.</td></tr>
+            <tr><th scope="row">Item size</th><td>Packed size, approximate</td><td>The item plus a packing allowance, scaled to its stated volume. Not measured.</td></tr>
+            <tr><th scope="row">Vehicle size</th><td>Class-typical</td><td>Typical operator-quoted cargo bodies, not manufacturer specifications.</td></tr>
+            <tr><th scope="row">Weight</th><td>Not checked</td><td>No payload figures are used.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="placement">
+      <h2 id="placement">How the 3D loading plan decides</h2>
+      <ul class="check-list">
+        <li>Every item is placed as a box at its configured size. Nothing is shrunk, merged or hidden to make it fit.</li>
+        <li>Heavy and tall furniture and appliances stay on the vehicle floor. Fridges, plants, TVs, gas cylinders and every fragile item stay upright.</li>
+        <li>Nothing is stacked on a fragile item. A fragile item may sit on a suitable non-fragile one.</li>
+        <li>Items rest only on things that can carry them, and at least 70% of an item's base must be supported.</li>
+        <li>Items with no valid place are drawn outside the vehicle, and a larger or additional vehicle is suggested.</li>
+      </ul>
+      <p>The preview is a visual planning aid, not proof of real-world fit.</p>
+    </section>
+
+    <section id="limits" aria-labelledby="limits-title">
+      <h2 id="limits-title">What the estimate does not check</h2>
+      <ul class="check-list">
+        <li>Weight, payload limits and axle loads.</li>
+        <li>Door, lift, staircase, lane or parking access at either end.</li>
+        <li>The real loading order, strapping, padding or centre of gravity.</li>
+        <li>The exact size and shape of your own furniture.</li>
+        <li>Items that need special handling: restricted items such as LPG cylinders are flagged for confirmation, not approved.</li>
+      </ul>
+      <p>Final vehicle choice, space, payload and price should always be confirmed with the transport provider.</p>
+    </section>
+
+    <aside class="cta-box">
+      <h2>Try it with your own items</h2>
+      <p>It takes a few minutes and you do not need to sign up.</p>
+      <a class="btn btn-primary btn-lg" href="../#estimator">Estimate my truck size</a>
+    </aside>
+  </article>
+</main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-about">
+        <p class="footer-brand">Truck Size Estimator</p>
+        <p>A free tool that helps you work out which goods vehicle size may suit a household move in India. It gives an estimate, not a quote or a guarantee of fit.</p>
+      </div>
+      <nav aria-label="Estimator pages">
+        <h2 class="footer-title">The estimator</h2>
+        <ul>
+          <li><a href="../#estimator">Estimate my truck size</a></li>
+          <li><a href="../how-it-works/">How it works</a></li>
+          <li><a href="../truck-sizes/">Truck sizes</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Helpful information">
+        <h2 class="footer-title">Good to know</h2>
+        <ul>
+          <li><a href="../#faq">Common questions</a></li>
+          <li><a href="../how-it-works/#limits">What the estimate does not check</a></li>
+          <li><a href="../truck-sizes/#sources">Where the sizes come from</a></li>
+        </ul>
+      </nav>
+      <div>
+        <h2 class="footer-title">Contact and legal</h2>
+        <p>Company contact details and the privacy policy will be published here when they are available. Nothing is shown that is not real.</p>
+      </div>
+    </div>
+    <p class="footer-base">&copy; 2026 Truck Size Estimator. Prototype with class-typical data, last reviewed November 2026.</p>
+  </div>
+</footer>
+<script src="../assets/js/site.js?v=1793816472"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+{
+  "catalogueVersion": "demo-2026.11.1",
+  "categories": [
+    {
+      "id": "living-room",
+      "name": "Living Room",
+      "description": "Sofas, TV units, tables, decor and pooja items",
+      "sortOrder": 10,
+      "icon": "sofa"
+    },
+    {
+      "id": "bedroom",
+      "name": "Bedroom",
+      "description": "Beds, mattresses, wardrobes, almirahs and kids furniture",
+      "sortOrder": 20,
+      "icon": "bed"
+    },
+    {
+      "id": "kitchen",
+      "name": "Kitchen",
+      "description": "Stoves, cylinders, mixers, cookware and utensils",
+      "sortOrder": 30,
+      "icon": "appliance"
+    },
+    {
+      "id": "dining-room",
+      "name": "Dining Room",
+      "description": "Dining tables, chairs and crockery units",
+      "sortOrder": 40,
+      "icon": "table"
+    },
+    {
+      "id": "appliances",
+      "name": "Appliances",
+      "description": "Fridge, washing machine, AC, TV, cooler and other appliances",
+      "sortOrder": 50,
+      "icon": "fridge"
+    },
+    {
+      "id": "bathroom",
+      "name": "Bathroom",
+      "description": "Cabinets, racks, hampers and stools",
+      "sortOrder": 60,
+      "icon": "bucket"
+    },
+    {
+      "id": "utility",
+      "name": "Utility",
+      "description": "Ladders, buckets, sewing machines, drying stands and tools",
+      "sortOrder": 70,
+      "icon": "ladder"
+    },
+    {
+      "id": "cartons-personal",
+      "name": "Cartons & Personal Belongings",
+      "description": "Boxes, suitcases, bags, clothes, books and linen",
+      "sortOrder": 80,
+      "icon": "carton"
+    },
+    {
+      "id": "study-office",
+      "name": "Study & Office",
+      "description": "Study tables, computers, office chairs and bookcases",
+      "sortOrder": 90,
+      "icon": "desk"
+    },
+    {
+      "id": "balcony",
+      "name": "Balcony & Garden",
+      "description": "Outdoor furniture, plants, pots and tools",
+      "sortOrder": 100,
+      "icon": "plant"
+    },
+    {
+      "id": "other",
+      "name": "Other Items",
+      "description": "Fitness, music, baby, special and anything not listed",
+      "sortOrder": 110,
+      "icon": "box"
+    }
+  ]
+}

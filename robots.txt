@@ -1,0 +1,7 @@
+# Replace YOUR-DOMAIN.example with the real address before launch.
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /storage/
+Disallow: /tests/
+Sitemap: https://YOUR-DOMAIN.example/sitemap.xml

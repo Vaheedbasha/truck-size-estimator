@@ -1,0 +1,12 @@
+{
+  "presetsVersion": "demo-2026.11.1",
+  "dataStatus": "demo",
+  "notice": "House sizes shown in step 1. Choosing a size does not add any items; it is only a starting point attached to the estimate and the quote request.",
+  "presets": [
+    { "id": "studio", "label": "Studio / 1 RK", "description": "One room with a small kitchen" },
+    { "id": "1bhk", "label": "1 BHK", "description": "1 bedroom, hall and kitchen" },
+    { "id": "2bhk", "label": "2 BHK", "description": "2 bedrooms, hall and kitchen" },
+    { "id": "3bhk", "label": "3 BHK", "description": "3 bedrooms, hall and kitchen" },
+    { "id": "4bhk", "label": "4+ BHK", "description": "4 or more bedrooms, or a villa" }
+  ]
+}
